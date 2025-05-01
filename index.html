@@ -1,18 +1,47 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>我们的秘密小窝</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="chat-container">
-    <div id="messages"></div>
-    <input id="msg-input" placeholder="输入消息..." />
-    <button id="send-btn">发送</button>
-    <input type="file" id="file-input" />
+  <div class="chat-container">
+    <div class="chat-box" id="chat-box"></div>
+    <div class="input-area">
+      <input type="text" id="message-input" placeholder="说点什么吧..." />
+      <button id="send-button">发送</button>
+    </div>
   </div>
-  <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
-  <script src="app.js"></script>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script>
+    const socket = io('https://chatroom-backend-0wha.onrender.com');
+    const input = document.getElementById('message-input');
+    const button = document.getElementById('send-button');
+    const chatBox = document.getElementById('chat-box');
+
+    function sendMessage() {
+      const msg = input.value.trim();
+      if (msg) {
+        socket.emit('chat', msg);
+        input.value = '';
+      }
+    }
+
+    button.addEventListener('click', sendMessage);
+    input.addEventListener('keypress', e => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    socket.on('chat', (msg) => {
+      const div = document.createElement('div');
+      div.className = 'chat-bubble';
+      div.textContent = msg;
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
+  </script>
 </body>
 </html>
