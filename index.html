@@ -10,7 +10,7 @@
   <div class="chat-container">
     <div class="chat-box" id="chat-box"></div>
     <div class="input-area">
-      <input type="text" id="message-input" placeholder="说点什么吧..." />
+      <input type="text" id="message-input" placeholder="我们终将重逢..." />
       <button id="send-button">发送</button>
     </div>
   </div>
@@ -24,18 +24,21 @@
 
     function sendMessage() {
       const msg = input.value.trim();
-      if (msg) {
+      if (msg !== '') {
         socket.emit('chat', msg);
         input.value = '';
       }
     }
 
     button.addEventListener('click', sendMessage);
-    input.addEventListener('keypress', e => {
-      if (e.key === 'Enter') sendMessage();
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        sendMessage();
+      }
     });
 
-    socket.on('chat', (msg) => {
+    socket.on('chat', msg => {
       const div = document.createElement('div');
       div.className = 'chat-bubble';
       div.textContent = msg;
