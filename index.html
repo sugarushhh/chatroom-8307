@@ -7,11 +7,12 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="chat-container">
+  <div class="chat-wrapper">
+    <header>我们的秘密小窝</header>
     <div class="chat-box" id="chat-box"></div>
     <div class="input-area">
       <input type="text" id="message-input" placeholder="我们终将重逢..." />
-      <button id="send-button">发送</button>
+      <button id="send-button">➤</button>
     </div>
   </div>
 
@@ -24,7 +25,7 @@
 
     function sendMessage() {
       const msg = input.value.trim();
-      if (msg !== '') {
+      if (msg) {
         socket.emit('chat', msg);
         input.value = '';
       }
